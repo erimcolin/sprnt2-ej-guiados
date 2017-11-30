@@ -60,6 +60,7 @@ var checkFirstClassZone = function() {
       airlineSeats[index] = true;
       reserveSeat(index);
       paintTicket(index, zone);
+      busySeats++;
       //al reservar un asiento no necesitamos seguir recorriendo el arreglo
       //rompemos el for con break
       break;
@@ -76,6 +77,7 @@ var checkEconomicZone = function() {
       airlineSeats[index] = true;
       reserveSeat(index);
       paintTicket(index, zone);
+      busySeats++;
       break;
     } else if (index == 9 && airlineSeats[index] == true) {
       reasignFirstClassZone(zone);
@@ -89,28 +91,38 @@ var reserveSeat = function(indexToPoint) {
 }
 
 var reasignEconomicZone = function(zone) {
-  var reasign = confirm(
-    'Ya no quedan asientos disponibles en ' + zone +
-    '\nQuisieras reservar en zona Económica?'
-  );
-
-  if(reasign == true) {
-    checkEconomicZone();
-  } else {
+  if(busySeats == 10) {
+    noSeats();
     nextFlight();
+  } else {
+    var reasign = confirm(
+      'Ya no quedan asientos disponibles en ' + zone +
+      '\nQuisieras reservar en zona Económica?'
+      );
+
+    if(reasign == true) {
+      checkEconomicZone();
+    } else {
+      nextFlight();
+    }
   }
 };
 
 var reasignFirstClassZone = function(zone){
-  var reasign = confirm(
-    'Ya no quedan asientos disponibles en ' +
-    zone + '\nQuieres reservar en Primera Clase?'
-  );
-
-  if(reasign == true) {
-    checkFirstClassZone();
-  } else {
+  if (busySeats == 10) {
+    noSeats();
     nextFlight();
+  } else {
+    var reasign = confirm(
+      'Ya no quedan asientos disponibles en ' +
+      zone + '\nQuieres reservar en Primera Clase?'
+    );
+
+    if(reasign == true) {
+      checkFirstClassZone();
+    } else {
+      nextFlight();
+    }
   }
 };
 
@@ -132,6 +144,10 @@ var paintTicket = function(index, zone){
   ticket.appendChild(reserveSeating);
   ticket.appendChild(zoneClass);
   containerTickets.appendChild(ticket);
+};
+
+var noSeats = function(){
+  alert('Lo sentimos. Ya no quedan asientos disponibles en este avión ')
 };
 
 paintSeats(airlineSeats);
